@@ -67,6 +67,8 @@ public class DroneController {
         if (drone.getState() == State.DELIVERED) {
             drone.setWeight(0);
             drone.setMedicationList(Collections.emptyList());
+        } else if (drone.getState() == State.LOADING && drone.getBatteryCapacity() < BATTERY_CAPACITY_MIN) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Too low battery level (<25%) for LOADING state");
         }
         return droneRepository.save(drone);
     }
