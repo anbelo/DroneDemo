@@ -1,11 +1,5 @@
 ## Drones
 
-[[_TOC_]]
-
----
-
-:scroll: **START**
-
 
 ### Introduction
 
@@ -17,11 +11,11 @@ Useful drone functions include delivery of small items that are (urgently) neede
 
 ### Task description
 
-We have a fleet of **10 drones**. A drone is capable of carrying devices, other than cameras, and capable of delivering small loads. For our use case **the load is medications**.
+We have a fleet of **drones**. A drone is capable of carrying devices, other than cameras, and capable of delivering small loads. For our use case **the load is medications**.
 
 A **Drone** has:
 - serial number (100 characters max);
-- model (Lightweight, Middleweight, Cruiserweight, Heavyweight);
+- model (LIGHTWEIGHT, MIDDLEWEIGHT, CRUISERWEIGHT, HEAVYWEIGHT);
 - weight limit (500gr max);
 - battery capacity (percentage);
 - state (IDLE, LOADING, LOADED, DELIVERING, DELIVERED, RETURNING).
@@ -32,41 +26,34 @@ Each **Medication** has:
 - code (allowed only upper case letters, underscore and numbers);
 - image (picture of the medication case).
 
-Develop a service via REST API that allows clients to communicate with the drones (i.e. **dispatch controller**). The specific communicaiton with the drone is outside the scope of this task. 
+#### REST API for communicating with drones. 
 
-The service should allow:
-- registering a drone;
-- loading a drone with medication items;
-- checking loaded medication items for a given drone; 
-- checking available drones for loading;
-- check drone battery level for a given drone;
+If service is running on http://localhost:8080/:
 
-> Feel free to make assumptions for the design approach. 
+| Method     | Endpoint                              | Description                                       |
+|------------|---------------------------------------|---------------------------------------------------|
+| `[POST]`   | `/api/v1/drones`                      | register (add) a drone *                          |
+| `[GET]`    | `/api/v1/drones/{id}`                 | find a drone by id                                |
+| `[PUT]`    | `/api/v1/drones`                      | update a existing drone                           |
+| `[DELETE]` | `/api/v1/drones/{id}`                 | unregister (remove) a drone                       |
+| `[POST]`   | `/api/v1/drones/{id}/medication`      | load (add) medication items to drone *            |
+| `[GET]`    | `/api/v1/drones/{id}`                 | check loaded medication items for a given drone * |
+| `[GET]`    | `/api/v1/drones/available`            | check available drones for loading *              |
+| `[GET]`    | `/api/v1/drones/{id}/battery`         | check drone battery level for a given drone *     |
+|            |                                       |                                                   |
+| `[POST]`   | `/api/v1/medication/{id}/uploadImage` | upload an image for medication *                  |
+| `[GET]`    | `/api/v1/medication/{id}`             | find medication by id                             |
 
----
+[]()* - mandatory. 
 
-### Requirements
+Also, available HAL-Explorer at http://localhost:8080/ and h2 console at http://localhost:8080/h2-console
 
-While implementing your solution **please take care of the following requirements**: 
+Run tests:
+```shell
+mvn clean test 
+```
 
-#### Functional requirements
-
-- There is no need for UI;
-- Prevent the drone from being loaded with more weight that it can carry;
-- Prevent the drone from being in LOADING state if the battery level is **below 25%**;
-- Introduce a periodic task to check drones battery levels and create history/audit event log for this.
-
----
-
-#### Non-functional requirements
-
-- Input/output data must be in JSON format;
-- Your project must be buildable and runnable;
-- Your project must have a README file with build/run/test instructions (use DB that can be run locally, e.g. in-memory, via container);
-- Required data must be preloaded in the database.
-- JUnit tests are optional but advisable (if you have time);
-- Advice: Show us how you work through your commit history.
-
----
-
-:scroll: **END**
+Run app:
+```shell
+mvn spring-boot:run
+```
